@@ -1,0 +1,25 @@
+{
+  "name": "xicrow/Crawler",
+  "description": "Website crawler and analyser",
+  "version": "0.0.1",
+  "type": "library",
+  "keywords": ["crawler", "analyzer", "website", "php"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jan Ebsen",
+      "email": "xicrow@gmail.com",
+      "homepage": "http://jan-ebsen.dk",
+      "role": "developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/xicrow/Crawler/issues"
+  },
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  }
+}
