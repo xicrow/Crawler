@@ -52,32 +52,38 @@ class Anchor {
 	}
 
 	/**
+	 * @param $question
+	 * @param string $arg1
 	 * @return bool
 	 */
-	public function isMailto() {
-		return (strpos($this->href, 'mailto:') !== false);
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function isJavascript() {
-		return (strpos($this->href, 'javascript:') !== false);
-	}
-
-	/**
-	 * @param $url
-	 * @return bool
-	 */
-	public function isInternal($url) {
-		return (strpos($this->href, $url) !== false);
-	}
-
-	/**
-	 * @param $url
-	 * @return bool
-	 */
-	public function isExternal($url) {
-		return !$this->isInternal($url);
+	public function is($question, $arg1 = ''){
+		switch ($question) {
+			case 'mailto':
+				return (strpos($this->href, 'mailto:') !== false);
+				break;
+			case 'javascript':
+				return (strpos($this->href, 'javascript:') !== false);
+				break;
+			case 'absolute':
+				return (strpos($this->href, '://') !== false);
+				break;
+			case 'relative':
+				return !$this->is('absolute');
+				break;
+			case 'https':
+				return (strpos($this->href, 'https://') !== false);
+				break;
+			case 'http':
+				return !$this->is('https');
+				break;
+			case 'internal':
+				return (strpos($this->href, $arg1) !== false);
+				break;
+			case 'external':
+				return !$this->is('internal', $arg1);
+			break;
+		}
+		
+		return false;
 	}
 }

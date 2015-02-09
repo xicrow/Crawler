@@ -23,4 +23,21 @@ class AnchorCollection extends AbstractCollection {
 	public function add(Anchor $item) {
 		$this->items[] = $item;
 	}
+
+	/**
+	 * @param $question
+	 * @param string $arg1
+	 * @return array
+	 */
+	public function getCollectionIs($question, $arg1 = '') {
+		$collection = [];
+		
+		foreach ($this->items as $item) {
+			if ($item instanceof Anchor && $item->is($question, $arg1)) {
+				$collection[] = $item;
+			}
+		}
+		
+		return $collection;
+	}
 }
