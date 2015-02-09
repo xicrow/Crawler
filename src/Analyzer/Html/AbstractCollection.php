@@ -5,11 +5,27 @@ namespace Xicrow\Crawler\Analyzer\Html;
  * Class AbstractCollection
  * @package Xicrow\Crawler\Analyzer\Html
  */
-class AbstractCollection implements \Countable, \Iterator {
+abstract class AbstractCollection implements \Countable, \Iterator {
 	/**
 	 * @var array
 	 */
 	protected $items = [];
+
+	/**
+	 * @param array $items
+	 */
+	public function __construct($items = []) {
+		if (is_array($items) && count($items)) {
+			foreach ($items as $item) {
+				$this->add($item);
+			}
+		}
+	}
+	
+	/**
+	 * @param $item
+	 */
+	abstract public function add($item);
 
 	/**
 	 * @return mixed

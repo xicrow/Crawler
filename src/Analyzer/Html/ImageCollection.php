@@ -7,20 +7,11 @@ namespace Xicrow\Crawler\Analyzer\Html;
  */
 class ImageCollection extends AbstractCollection {
 	/**
-	 * @param array $items
+	 * @param $item
 	 */
-	public function __construct($items = []) {
-		if (is_array($items) && count($items)) {
-			foreach ($items as $item) {
-				$this->add(new Image($item));
-			}
+	public function add($item) {
+		if ($item instanceof Image) {
+			$this->items[] = $item;
 		}
-	}
-
-	/**
-	 * @param Image $item
-	 */
-	public function add(Image $item) {
-		$this->items[] = $item;
 	}
 }

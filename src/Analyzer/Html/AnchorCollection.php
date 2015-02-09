@@ -7,21 +7,12 @@ namespace Xicrow\Crawler\Analyzer\Html;
  */
 class AnchorCollection extends AbstractCollection {
 	/**
-	 * @param array $items
+	 * @param $item
 	 */
-	public function __construct($items = []) {
-		if (is_array($items) && count($items)) {
-			foreach ($items as $item) {
-				$this->add(new Anchor($item));
-			}
+	public function add($item) {
+		if ($item instanceof Anchor) {
+			$this->items[] = $item;
 		}
-	}
-
-	/**
-	 * @param Anchor $item
-	 */
-	public function add(Anchor $item) {
-		$this->items[] = $item;
 	}
 
 	/**
