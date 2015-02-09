@@ -123,8 +123,6 @@ class Crawler {
 			return false;
 		}
 
-		$this->source = false;
-
 		if (function_exists('curl_init')) {
 			$ch = curl_init();
 			curl_setopt_array($ch, [
