@@ -5,7 +5,7 @@ namespace Xicrow\Crawler\Analyzer\Html;
  * Class ImageCollection
  * @package Xicrow\Crawler\Analyzer\Html
  */
-class ImageCollection extends AbstractCollection {
+class ImageCollection extends AbstractElementCollection {
 	/**
 	 * @param $item
 	 */

@@ -5,7 +5,7 @@ namespace Xicrow\Crawler\Analyzer\Html;
  * Class AnchorCollection
  * @package Xicrow\Crawler\Analyzer\Html
  */
-class AnchorCollection extends AbstractCollection {
+class AnchorCollection extends AbstractElementCollection {
 	/**
 	 * @param $item
 	 */

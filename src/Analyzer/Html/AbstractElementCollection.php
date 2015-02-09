@@ -5,7 +5,7 @@ namespace Xicrow\Crawler\Analyzer\Html;
  * Class AbstractCollection
  * @package Xicrow\Crawler\Analyzer\Html
  */
-abstract class AbstractCollection implements \Countable, \Iterator {
+abstract class AbstractElementCollection implements \Countable, \Iterator {
 	/**
 	 * @var array
 	 */
