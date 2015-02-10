@@ -30,6 +30,11 @@ class Crawler {
 	private $urlBase = '';
 
 	/**
+	 * @var array
+	 */
+	private $responseInfo = [];
+	
+	/**
 	 * @var string
 	 */
 	private $source = '';
@@ -40,10 +45,12 @@ class Crawler {
 	 */
 	public function __construct($url, $options = []) {
 		$this->options = array_merge($this->options, $options);
-
-		$this->setUrl($url);
-		$this->__getUrlBase();
-		$this->__getSource();
+		
+		if (trim($url) != '') {
+			$this->setUrl($url);
+			$this->__getUrlBase();
+			$this->__getSource();
+		}
 	}
 
 	/**
@@ -99,30 +106,18 @@ class Crawler {
 	 * @return bool
 	 */
 	private function __getUrlBase() {
-		if ($this->url === '') {
-			return false;
-		}
-
 		$urlParts = parse_url($this->url);
-		if (!isset($urlParts['scheme']) || !isset($urlParts['host'])) {
-			return false;
+		if (isset($urlParts['scheme']) && isset($urlParts['host'])) {
+			$this->urlBase = $urlParts['scheme'] . '://' . $urlParts['host'];
 		}
-
-		$this->urlBase = $urlParts['scheme'] . '://' . $urlParts['host'];
-
+		
 		unset($urlParts);
-
-		return true;
 	}
 
 	/**
 	 * @return bool
 	 */
 	private function __getSource() {
-		if ($this->url === '') {
-			return false;
-		}
-
 		if (function_exists('curl_init')) {
 			$ch = curl_init();
 			curl_setopt_array($ch, [
@@ -134,29 +129,23 @@ class Crawler {
 				CURLOPT_USERAGENT      => $this->options['userAgent'],
 				CURLOPT_RETURNTRANSFER => true
 			]);
-			$source = curl_exec($ch);
-			$info = curl_getinfo($ch);
+			$this->source = curl_exec($ch);
+			$this->responseInfo = curl_getinfo($ch);
 			curl_close($ch);
-
-			if ($info['http_code'] != 200) {
-				return false;
-			}
-
-			unset($ch, $info);
+			
+			$this->responseCode = $this->responseInfo['http_code'];
+			
+			unset($ch);
 		} else {
-			if (!$source = file_get_contents($this->url)) {
-				return false;
-			}
+			$this->source = file_get_contents($this->url);
 		}
+		
+		if (is_string($this->source)) {
+			mb_detect_order('ASCII,UTF-8,ISO-8859-1,windows-1252,iso-8859-15');
+			$encoding = mb_detect_encoding($this->source);
+			$this->source = mb_convert_encoding($this->source, $this->options['encoding'], $encoding);
 
-		mb_detect_order('ASCII,UTF-8,ISO-8859-1,windows-1252,iso-8859-15');
-		$encoding = mb_detect_encoding($source);
-		$source = mb_convert_encoding($source, $this->options['encoding'], $encoding);
-
-		$this->source = $source;
-
-		unset($encoding, $source);
-
-		return true;
+			unset($encoding);
+		}
 	}
 }
