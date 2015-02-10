@@ -30,9 +30,9 @@ class Crawler {
 	private $urlBase = '';
 
 	/**
-	 * @var array
+	 * @var mixed
 	 */
-	private $responseInfo = [];
+	private $responseInfo;
 	
 	/**
 	 * @var string
@@ -132,8 +132,6 @@ class Crawler {
 			$this->source = curl_exec($ch);
 			$this->responseInfo = curl_getinfo($ch);
 			curl_close($ch);
-			
-			$this->responseCode = $this->responseInfo['http_code'];
 			
 			unset($ch);
 		} else {
