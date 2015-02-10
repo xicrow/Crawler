@@ -29,37 +29,77 @@ class Anchor extends AbstractElement {
 	 * @param $question
 	 * @param string $arg1
 	 * @return bool
+	 * @see isMailto
+	 * @see isJavascript
+	 * @see isAbsolute
+	 * @see isRelative
+	 * @see isHttps
+	 * @see isHttp
+	 * @see isInternal
+	 * @see isExternal
 	 */
 	public function is($question, $arg1 = ''){
-		$answer = false;
-		
-		switch ($question) {
-			case 'mailto':
-				$answer = (strpos($this->href, 'mailto:') !== false);
-				break;
-			case 'javascript':
-				$answer = (strpos($this->href, 'javascript:') !== false);
-				break;
-			case 'absolute':
-				$answer = (strpos($this->href, '://') !== false);
-				break;
-			case 'relative':
-				$answer = !$this->is('absolute');
-				break;
-			case 'https':
-				$answer = (strpos($this->href, 'https://') !== false);
-				break;
-			case 'http':
-				$answer = !$this->is('https');
-				break;
-			case 'internal':
-				$answer = (strpos($this->href, $arg1) !== false);
-				break;
-			case 'external':
-				$answer = !$this->is('internal', $arg1);
-				break;
+		$methodName = 'is' . ucfirst(strtolower($question));
+		if (method_exists($this, $methodName)) {
+			return $this->$methodName($arg1);
 		}
 		
-		return $answer;
+		return false;
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isMailto() {
+		return (strpos($this->href, 'mailto:') !== false);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isJavascript() {
+		return (strpos($this->href, 'javascript:') !== false);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isAbsolute() {
+		return (strpos($this->href, '://') !== false);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isRelative() {
+		return !$this->is('absolute');
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isHttps() {
+		return (strpos($this->href, 'https://') !== false);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isHttp() {
+		return !$this->is('https');
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isInternal($url) {
+		return (strpos($this->href, $url) !== false);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function isExternal($url) {
+		return !$this->is('internal', $url);
 	}
 }
