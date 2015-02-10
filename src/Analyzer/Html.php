@@ -17,6 +17,15 @@ class Html {
 	/**
 	 * @var array
 	 */
+	private $tagToVarMap = [
+		'meta' => 'metas',
+		'img'  => 'images',
+		'a'    => 'anchors'
+	];
+
+	/**
+	 * @var array
+	 */
 	private $metas = [];
 
 	/**
@@ -117,24 +126,21 @@ class Html {
 	 */
 	private function __analyze() {
 		$domDocument = new \DOMDocument('1.0');
-		$domDocument->loadHTML($this->__source);
 
-		$domElements = $domDocument->getElementsByTagName('meta');
-		foreach ($domElements as $domElement) {
-			$this->metas[] = $domElement->nodeValue;
+		if (!$domDocument->loadHTML($this->__source)) {
+			unset($domDocument);
+
+			return false;
 		}
 
-		$domElements = $domDocument->getElementsByTagName('image');
-		foreach ($domElements as $domElement) {
-			$this->images[] = $domElement->nodeValue;
+		foreach ($this->tagToVarMap as $tag => $var) {
+			$domElements = $domDocument->getElementsByTagName($tag);
+			foreach ($domElements as $domElement) {
+				$this->$var[] = $domElement->nodeValue;
+			}
 		}
 
-		$domElements = $domDocument->getElementsByTagName('a');
-		foreach ($domElements as $domElement) {
-			$this->anchors[] = $domElement->nodeValue;
-		}
-
-		unset($domDocument, $domElements, $domElement);
+		unset($domDocument, $var, $tag, $domElements, $domElement);
 
 		return true;
 	}
